@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.opsc_map.databinding.ActivityMapsBinding;
@@ -34,12 +35,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LocationManager locationManager;
     private LocationListener locationListener;
     private Location userCurrentLocation;
+    //private double lat=userCurrentLocation.getLatitude(),lng=userCurrentLocation.getLongitude();
+    private double lat=-26.0008,lng= 28.1261;
+    ImageButton atm,hosp,res;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        res= findViewById(R.id.res);
+        atm= findViewById(R.id.atm);
+        hosp= findViewById(R.id.hospital);
+
+
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -51,6 +61,66 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         initLocationListener();
         getUserCurrentLocation();
+
+
+        atm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                StringBuilder  stringBuilder = new StringBuilder("http://maps.googleapis.com/maps/api/place/nearbysearch/json?");
+                stringBuilder.append("location=" +lat+","+lng);
+                stringBuilder.append("&radius=1000");
+                stringBuilder.append("&type=atm");
+                stringBuilder.append("&sensor=true");
+                stringBuilder.append("&key=" +getResources().getString(R.string.api_key));
+
+                String url = stringBuilder.toString();
+                Object dataFetch[]=new Object[2];
+                dataFetch[0]=mMap;
+                dataFetch[1]=url;
+
+                FeatchData featchData = new FeatchData();
+                featchData.execute(dataFetch);
+            }
+        });
+        res.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                StringBuilder  stringBuilder = new StringBuilder("http://maps.googleapis.com/maps/api/place/nearbysearch/json?");
+                stringBuilder.append("location=" +lat+","+lng);
+                stringBuilder.append("&radius=1000");
+                stringBuilder.append("&type=resturants");
+                stringBuilder.append("&sensor=true");
+                stringBuilder.append("&key=" +getResources().getString(R.string.api_key));
+
+                String url = stringBuilder.toString();
+                Object dataFetch[]=new Object[2];
+                dataFetch[0]=mMap;
+                dataFetch[1]=url;
+
+                FeatchData featchData = new FeatchData();
+                featchData.execute(dataFetch);
+            }
+        });
+
+        hosp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                StringBuilder  stringBuilder = new StringBuilder("http://maps.googleapis.com/maps/api/place/nearbysearch/json?");
+                stringBuilder.append("location=" +lat+","+lng);
+                stringBuilder.append("&radius=1000");
+                stringBuilder.append("&type=hospital");
+                stringBuilder.append("&sensor=true");
+                stringBuilder.append("&key=" +getResources().getString(R.string.api_key));
+
+                String url = stringBuilder.toString();
+                Object dataFetch[]=new Object[2];
+                dataFetch[0]=mMap;
+                dataFetch[1]=url;
+
+                FeatchData featchData = new FeatchData();
+                featchData.execute(dataFetch);
+            }
+        });
     }
 
     private void getUserCurrentLocation() {
@@ -118,23 +188,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         };
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(28.630863, 77.375475);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker at Electronic city Metro"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
         setMarkerAtmyLocation();
     }
     private void setMarkerAtmyLocation(){
@@ -173,5 +233,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 setMarkerAtmyLocation();
                 break;
         }
+
+
     }
 }
