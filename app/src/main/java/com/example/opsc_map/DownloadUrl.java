@@ -11,7 +11,7 @@ import java.net.URL;
 
 public class DownloadUrl {
 
-    public  String retirevveUrl(String url) throws IOException{
+    public  String retireveUrl(String url) throws IOException{
         String urlData="";
         HttpURLConnection httpURLConnection = null;
         InputStream inputStream = null;
