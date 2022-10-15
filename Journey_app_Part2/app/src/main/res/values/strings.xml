@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">OPSC_map</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="api_key" translatable="false">AIzaSyAGxpFh86SgfxVuCT4Y36_77nWfb-fkejk</string>
+
+
+</resources>
